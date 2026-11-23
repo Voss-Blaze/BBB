@@ -639,7 +639,7 @@ GameObject:
   - component: {fileID: 1285652255}
   - component: {fileID: 1285652254}
   m_Layer: 5
-  m_Name: Body_Biyinv
+  m_Name: Body_Biyiniao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -979,7 +979,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-
 --- !u!224 &2095388829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -999,7 +998,14 @@ RectTransform:
   m_AnchoredPosition: {x: 8, y: 14.582642}
   m_SizeDelta: {x: 1342, y: 336}
   m_Pivot: {x: 0.5, y: 0.5}
-
+--- !u!222 &2095388830
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095388828}
+  m_CullTransparentMesh: 1
 --- !u!114 &2095388831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,16 +1036,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
---- !u!222 &2095388830
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095388828}
-  m_CullTransparentMesh: 1
-
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
