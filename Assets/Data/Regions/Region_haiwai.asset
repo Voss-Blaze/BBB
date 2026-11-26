@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a3b4c5d6e7f80910213243546576879, type: 3}
+  m_Name: Region_haiwai
+  m_EditorClassIdentifier: 
+  regionId: haiwai
+  displayName: "\u6D77\u5916\u5377"
+  order: 2
+  levelSprite: {fileID: 21300000, guid: aa08a9db496382a4e898b1c1e31de3ee, type: 3}
+  scrollSprite: {fileID: 21300000, guid: 988c2d39623f4be43b872a7553488dd2, type: 3}
+  beasts:
+  - {fileID: 11400000, guid: 9d8d8acd7acf84710ac8df8b3e383205, type: 2}
+  - {fileID: 11400000, guid: e24ddf43101854bc7e592b68a6ef463d, type: 2}
+  traceSlots:
+  - {x: 0.17, y: 0.71}
+  - {x: 0.36, y: 0.43}
+  - {x: 0.57, y: 0.73}
+  - {x: 0.69, y: 0.36}
+  - {x: 0.29, y: 0.19}
+  - {x: 0.75, y: 0.58}

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2e3d4c5b6a79881726354453627189, type: 3}
+  m_Name: Beast_jiuweihu
+  m_EditorClassIdentifier: 
+  beastId: jiuweihu
+  displayName: "\u4E5D\u5C3E\u72D0"
+  pinyin: "ji\u01D4 w\u011Bi h\xFA"
+  regionId: dahuang
+  orderInRegion: 1
+  tier: 0
+  nameSprite: {fileID: 0}
+  codexSprite: {fileID: 21300000, guid: 5358a7d9359c9ce40867d1e859d605a0, type: 3}
+  fragments:
+  - title: "\u6B8B\u9875\u4E00 \xB7 \u8BA4\u8BC6\u5B83"
+    body: "\u9752\u4E18\u4E4B\u5C71\uFF0C\u6709\u517D\u7109\uFF0C\u5176\u72B6\u5982\u72D0\u800C\u4E5D\u5C3E\uFF0C\u5176\u97F3\u5982\u5A74\u513F\u3002"
+    paperSprite: {fileID: 0}
+  - title: "\u6B8B\u9875\u4E8C \xB7 \u7406\u89E3\u5B83"
+    body: "\u6816\u606F\u5728\u9752\u4E18\u4E4B\u5C71\uFF0C\u98DF\u4EBA\uFF0C\u5C45\u4E8E\u5C71\u6797\u3002"
+    paperSprite: {fileID: 0}
+  - title: "\u6B8B\u9875\u4E09 \xB7 \u5BF9\u5E94\u5B83"
+    body: "\u8089\u53EF\u4EE5\u98DF\u7528\uFF0C\u98DF\u4E4B\u4E0D\u53D7\u86CA\u6BD2\u5996\u90AA\u4FB5\u5BB3\u3002"
+    paperSprite: {fileID: 0}
+  writeBackdropSprite: {fileID: 0}
+  writeBaseSprite: {fileID: 21300000, guid: 730d80a54ed316940871a567c849ced4, type: 3}
+  writeDoneSprite: {fileID: 21300000, guid: 994cc9d6f760c914cab824e944f260b8, type: 3}
+  writeFrameSprite: {fileID: 0}
+  writeRingLarge: {fileID: 0}
+  writeRingMedium: {fileID: 0}
+  writeRingSmall: {fileID: 0}
+  portraitSprite: {fileID: 21300000, guid: 5358a7d9359c9ce40867d1e859d605a0, type: 3}
+  writeRounds: 3
+  traces:
+  - type: 0
+    prompt: "\u6BDB\u8338\u8338\u7684\u767D\u8272\u5C3E\u5DF4\u5728\u6447\u6643"
+    fragmentIndex: 0
+    spotSprite: {fileID: 21300000, guid: 259c4681823ddd04a8c768c6e9ad2cc7, type: 3}
+  - type: 1
+    prompt: "\u9752\u4E18\u5C71\u4E0A\u6709\u4EBA\u7C7B\u7684\u8DB3\u8FF9"
+    fragmentIndex: 1
+    spotSprite: {fileID: 21300000, guid: b2e6ec7ff6a3c8941a5c0be3f27303a3, type: 3}
+  - type: 2
+    prompt: "\u5C71\u6751\u6709\u4EBA\u4EE5\u5176\u5165\u836F\uFF0C\u4F20\u8A00\u53EF\u4E0D\u53D7\u86CA\u6BD2\u5996\u90AA\u4FB5\u5BB3"
+    fragmentIndex: 2
+    spotSprite: {fileID: 21300000, guid: 916bb903a3494c24a8d75c70ef10eab3, type: 3}

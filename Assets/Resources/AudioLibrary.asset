@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11b22c33d44e55f66a77b88c99d0e11, type: 3}
+  m_Name: AudioLibrary
+  m_EditorClassIdentifier: 
+  bgmMain: {fileID: 8300000, guid: 96b20dea050895440bb4c6d7a1023114, type: 3}
+  bgmExplore: {fileID: 8300000, guid: 34b31a33af988e84c9c477bfa2d9fabd, type: 3}
+  uiClick: {fileID: 8300000, guid: e6700d9ead9e9214a9676794049509f1, type: 3}
+  error: {fileID: 8300000, guid: 3c5cf0560c698234daccceeefcad2d57, type: 3}
+  discover: {fileID: 8300000, guid: 0c176cb7af7fb1d4b92a04af355fda2d, type: 3}
+  countdown: {fileID: 8300000, guid: a59233606b38a7341b989dc51921ed9c, type: 3}
+  judgeSuccess: {fileID: 8300000, guid: 96e8339c59736274eb6c35893ac9ac77, type: 3}
+  judgeFail: {fileID: 8300000, guid: 77073cacd80c15a4eac1043527df0bf3, type: 3}
+  reward: {fileID: 8300000, guid: dc15da69c7e67bf4a9dffc9021b8ac64, type: 3}

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d6e7f809102132435465768798a9bac, type: 3}
+  m_Name: GameDatabase
+  m_EditorClassIdentifier: 
+  regions:
+  - {fileID: 11400000, guid: 13a411dbc86ba3d71f579bfa444122f1, type: 2}
+  - {fileID: 11400000, guid: 53732510a4d26a76be5dd99f8386126e, type: 2}
+  - {fileID: 11400000, guid: 1a137cd098817f94144f5ac2f7d25ddb, type: 2}
+  - {fileID: 11400000, guid: 77499801e5dcc8d72d83445420eb3798, type: 2}
+  namePool: {fileID: 11400000, guid: 1752f048b2781c59f213bd7e055d00a5, type: 2}
+  config: {fileID: 11400000, guid: 9ec81d8603bca295f117bd56017b1115, type: 2}

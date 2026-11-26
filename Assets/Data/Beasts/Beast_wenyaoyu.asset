@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2e3d4c5b6a79881726354453627189, type: 3}
+  m_Name: Beast_wenyaoyu
+  m_EditorClassIdentifier: 
+  beastId: wenyaoyu
+  displayName: "\u6587\u9CD0\u9C7C"
+  pinyin: "w\xE9n y\xE1o y\xFA"
+  regionId: shanjuan
+  orderInRegion: 1
+  tier: 1
+  nameSprite: {fileID: 0}
+  codexSprite: {fileID: 21300000, guid: 7f4f9bec625bd4d40acd9c22bb3b201f, type: 3}
+  fragments:
+  - title: "\u6B8B\u9875\u4E00 \xB7 \u8BA4\u8BC6\u5B83"
+    body: "\u662F\u591A\u6587\u9CD0\u9C7C\uFF0C\u72B6\u5982\u9CA4\u9C7C\uFF0C\u9C7C\u8EAB\u800C\u9E1F\u7FFC\uFF0C\u82CD\u6587\u800C\u767D\u9996\u8D64\u5599\u3002"
+    paperSprite: {fileID: 0}
+  - title: "\u6B8B\u9875\u4E8C \xB7 \u7406\u89E3\u5B83"
+    body: "\u5E38\u884C\u897F\u6D77\u6E38\u4E8E\u4E1C\u6D77\uFF0C\u4EE5\u591C\u98DE\uFF0C\u5176\u97F3\u5982\u9E3E\u9E21\u3002"
+    paperSprite: {fileID: 0}
+  - title: "\u6B8B\u9875\u4E09 \xB7 \u5BF9\u5E94\u5B83"
+    body: "\u5176\u5473\u9178\u7518\uFF0C\u98DF\u4E4B\u5DF2\u72C2\uFF0C\u89C1\u5219\u5929\u4E0B\u5927\u7A70\u3002"
+    paperSprite: {fileID: 0}
+  writeBackdropSprite: {fileID: 21300000, guid: cfa7e5cb3d16d524cbdc0c1bcc57d708, type: 3}
+  writeBaseSprite: {fileID: 21300000, guid: 14eb82867b7328c4ab60cdc551365a60, type: 3}
+  writeDoneSprite: {fileID: 21300000, guid: aae0c89fb77365c498f0e4b2180c8441, type: 3}
+  writeFrameSprite: {fileID: 0}
+  writeRingLarge: {fileID: 21300000, guid: ce90abcc0639163468801a4161a3aa66, type: 3}
+  writeRingMedium: {fileID: 21300000, guid: 08492fc60a09511459c7d4dba46c6193, type: 3}
+  writeRingSmall: {fileID: 21300000, guid: 06a74e9bb254325448b9a57627b6234b, type: 3}
+  portraitSprite: {fileID: 21300000, guid: 7f4f9bec625bd4d40acd9c22bb3b201f, type: 3}
+  writeRounds: 3
+  traces:
+  - type: 0
+    prompt: "\u6C34\u4E0B\u6709\u4E00\u9CA4\u8EAB\u9E1F\u7FFC\u7684\u751F\u7269\u5728\u6E38\u6765\u6E38\u53BB"
+    fragmentIndex: 0
+    spotSprite: {fileID: 21300000, guid: a549a2637071fad4baa89cb6861fcbaa, type: 3}
+  - type: 1
+    prompt: "\u591C\u95F4\u6709\u9E3E\u9E21\u9E23\u4ECE\u7A7A\u4E2D\u4F20\u6765"
+    fragmentIndex: 1
+    spotSprite: {fileID: 21300000, guid: 6d808cf1f09b2be4794ecefec1c5d386, type: 3}
+  - type: 2
+    prompt: "\u519C\u6237\u7686\u7231\u6302\u5176\u753B\u50CF"
+    fragmentIndex: 2
+    spotSprite: {fileID: 21300000, guid: bcf9b7baaae93954c9995dbffd6ee4c0, type: 3}
