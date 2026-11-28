@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using Lingjuan.Audio;
 using Lingjuan.Data;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Lingjuan.UI
 {
-    /// <summary>写生玩法：画笔像钟表指针一样顺时针旋转，笔尖朝外，命中本轮颜色弧线即成功。</summary>
+    /// <summary>写生玩法：画笔顺时针旋转，命中本轮的全部弧线后进入下一轮。</summary>
     public class SketchPanelView : MonoBehaviour
     {
         public GameDatabase database;
@@ -38,9 +39,9 @@ namespace Lingjuan.UI
         private const int ArcsPerRound = 3;
         private const float ArcDisplay = 1046f;
         private const float ArcMargin = 6f;
-        private const float DegreesPerSecond = 80f;
-        private const float MaxArcWidth = 20f;
-        private const float MinArcWidth = 12f;
+        private const float DegreesPerSecond = 88f;
+        private const float MaxArcWidth = 18f;
+        private const float MinArcWidth = 10f;
 
         private static readonly Dictionary<int, Sprite> ArcSprites = new Dictionary<int, Sprite>();
         private static Sprite _ringSprite;
@@ -53,14 +54,13 @@ namespace Lingjuan.UI
             new Color(0.52f, 0.40f, 0.66f, 0.95f)
         };
 
-        private readonly List<Image> _arcs = new List<Image>();
-        private readonly List<Vector2> _allArcs = new List<Vector2>();
-        private readonly List<Vector2> _targets = new List<Vector2>();
+        private readonly List<RoundArc> _targets = new List<RoundArc>();
 
         private BeastDefinition _beast;
         private Action<bool> _onFinished;
         private int _rounds;
         private int _roundIndex;
+        private int _remainingTargets;
         private int _tolerance;
         private int _maxTolerance;
         private float _timeLeft;
@@ -68,6 +68,9 @@ namespace Lingjuan.UI
         private float _angle;
         private float _arcWidth;
         private bool _playing;
+        private EventTrigger _judgeInput;
+        private EventTrigger.Entry _judgePress;
+        private EventTrigger.Entry _judgeSubmit;
         private Vector2 _appliedOffset;
         private int _lastCountdownSecond = -1;
 
@@ -80,15 +83,44 @@ namespace Lingjuan.UI
             if (judgeButton != null)
             {
                 judgeButton.transition = Selectable.Transition.None;
-                judgeButton.onClick.AddListener(OnJudge);
+                _judgeInput = judgeButton.GetComponent<EventTrigger>();
+                if (_judgeInput == null)
+                {
+                    _judgeInput = judgeButton.gameObject.AddComponent<EventTrigger>();
+                }
+
+                _judgePress = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
+                _judgePress.callback.AddListener(OnJudgePressed);
+                _judgeInput.triggers.Add(_judgePress);
+
+                _judgeSubmit = new EventTrigger.Entry { eventID = EventTriggerType.Submit };
+                _judgeSubmit.callback.AddListener(_ => JudgeFromInput());
+                _judgeInput.triggers.Add(_judgeSubmit);
             }
         }
 
         private void OnDestroy()
         {
-            if (judgeButton != null)
+            if (_judgeInput != null)
             {
-                judgeButton.onClick.RemoveListener(OnJudge);
+                _judgeInput.triggers.Remove(_judgePress);
+                _judgeInput.triggers.Remove(_judgeSubmit);
+            }
+        }
+
+        private void OnJudgePressed(BaseEventData data)
+        {
+            if (data is PointerEventData pointerEvent && pointerEvent.button == PointerEventData.InputButton.Left)
+            {
+                JudgeFromInput();
+            }
+        }
+
+        private void JudgeFromInput()
+        {
+            if (judgeButton != null && judgeButton.IsActive() && judgeButton.IsInteractable())
+            {
+                OnJudge();
             }
         }
 
@@ -106,6 +138,9 @@ namespace Lingjuan.UI
                 _appliedOffset = diskOffset;
                 ApplyDiskOffset();
             }
+
+            // EventSystem 在 Update 判定输入，之后才把笔尖推进到下一帧。
+            AdvanceRound();
         }
 
         private void ApplyDiskOffset()
@@ -115,11 +150,11 @@ namespace Lingjuan.UI
                 pointer.anchoredPosition = diskOffset;
             }
 
-            foreach (Image arc in _arcs)
+            foreach (RoundArc target in _targets)
             {
-                if (arc != null)
+                if (target.visual != null)
                 {
-                    arc.rectTransform.anchoredPosition = diskOffset;
+                    target.visual.rectTransform.anchoredPosition = diskOffset;
                 }
             }
         }
@@ -249,29 +284,38 @@ namespace Lingjuan.UI
         private void StartRound()
         {
             _playing = false;
+            ClearArcs();
             _angle = UnityEngine.Random.Range(0f, 360f);
+            if (pointer != null)
+            {
+                pointer.localRotation = Quaternion.Euler(0f, 0f, -_angle);
+            }
+
             _arcWidth = Mathf.Round(Mathf.Lerp(MaxArcWidth, MinArcWidth, Mathf.Clamp01(_roundIndex / (float)Mathf.Max(1, _rounds - 1))));
             _timeLeft = RoundTime;
+            if (timerFill != null)
+            {
+                timerFill.fillAmount = 1f;
+            }
+
             _lastCountdownSecond = -1;
             float baseFactor = Config != null ? Config.baseSpeed + Config.speedStep * _roundIndex : 1f + 0.15f * _roundIndex;
             _speed = Mathf.Max(24f, baseFactor * DegreesPerSecond);
-            _targets.Clear();
 
             Color color = RoundColors[_roundIndex % RoundColors.Length];
             for (int i = 0; i < ArcsPerRound; i++)
             {
                 float start = FindFreeStart(_arcWidth);
-                CreateArc(start, _arcWidth, color);
-                _targets.Add(new Vector2(start, _arcWidth));
-                _allArcs.Add(new Vector2(start, _arcWidth));
+                _targets.Add(new RoundArc { start = start, visual = CreateArc(start, _arcWidth, color) });
             }
 
+            _remainingTargets = _targets.Count;
             _playing = true;
             UpdateHud();
-            SetHint("笔尖转到同色弧线上时点击画面");
+            ShowArcProgress();
         }
 
-        private void Update()
+        private void AdvanceRound()
         {
             if (!_playing)
             {
@@ -307,7 +351,7 @@ namespace Lingjuan.UI
             }
         }
 
-        /// <summary>点击画面判定笔尖是否落在本轮任意一条弧线上。</summary>
+        /// <summary>每段弧线各判定一次，全部命中才算完成本轮。</summary>
         public void OnJudge()
         {
             if (!_playing)
@@ -315,11 +359,29 @@ namespace Lingjuan.UI
                 return;
             }
 
-            if (IsPointerOnArc())
+            RoundArc target = GetArcAtPointer();
+            if (target != null)
             {
-                _playing = false;
+                if (target.hit)
+                {
+                    ShowArcProgress();
+                    return;
+                }
+
+                target.hit = true;
+                SetAlpha(target.visual, 0.3f);
+                _remainingTargets--;
                 AudioManager.PlaySfx(SfxId.JudgeSuccess);
-                StartCoroutine(RoundSuccessRoutine());
+                if (_remainingTargets == 0)
+                {
+                    _playing = false;
+                    StartCoroutine(RoundSuccessRoutine());
+                }
+                else
+                {
+                    ShowArcProgress();
+                }
+
                 return;
             }
 
@@ -335,19 +397,25 @@ namespace Lingjuan.UI
             }
         }
 
-        private bool IsPointerOnArc()
+        private RoundArc GetArcAtPointer()
         {
             float pointerAngle = Mathf.Repeat(PointerBaseAngle - _angle, 360f);
 
-            foreach (Vector2 target in _targets)
+            foreach (RoundArc target in _targets)
             {
-                if (Mathf.Repeat(pointerAngle - target.x, 360f) <= target.y)
+                float offset = Mathf.Repeat(pointerAngle - target.start, 360f);
+                if (offset <= _arcWidth)
                 {
-                    return true;
+                    return target;
                 }
             }
 
-            return false;
+            return null;
+        }
+
+        private void ShowArcProgress()
+        {
+            SetHint("笔尖对准未命中的弧线时点击（" + (_targets.Count - _remainingTargets) + " / " + _targets.Count + "）");
         }
 
         private IEnumerator RoundSuccessRoutine()
@@ -499,9 +567,9 @@ namespace Lingjuan.UI
             return image;
         }
 
-        private void CreateArc(float start, float width, Color color)
+        private Image CreateArc(float start, float width, Color color)
         {
-            var go = new GameObject("弧线" + (_arcs.Count + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            var go = new GameObject("弧线" + (_targets.Count + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             var rect = go.GetComponent<RectTransform>();
             rect.SetParent(arcRoot != null ? arcRoot : transform, false);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -518,7 +586,7 @@ namespace Lingjuan.UI
             image.raycastTarget = false;
             image.preserveAspect = false;
 
-            _arcs.Add(image);
+            return image;
         }
 
         /// <summary>提前把各轮弧线与灰环贴图生成好，避免游戏中点击时卡顿。</summary>
@@ -598,18 +666,19 @@ namespace Lingjuan.UI
             return Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), 100f);
         }
 
-        /// <summary>在所有已存在的弧之外找一个空闲起点，避免历史弧与本轮弧重叠。</summary>
+        /// <summary>在本轮已放置的弧之外找一个空闲起点。</summary>
         private float FindFreeStart(float width)
         {
-            for (int attempt = 0; attempt < 240; attempt++)
+            float start = UnityEngine.Random.Range(0f, 360f);
+            for (int offset = 0; offset < 360; offset++)
             {
-                float candidate = UnityEngine.Random.Range(0f, 360f);
+                float candidate = Mathf.Repeat(start + offset, 360f);
                 bool free = true;
 
-                foreach (Vector2 arc in _allArcs)
+                foreach (RoundArc arc in _targets)
                 {
-                    if (Mathf.Repeat(candidate - arc.x, 360f) < arc.y + ArcMargin ||
-                        Mathf.Repeat(arc.x - candidate, 360f) < width + ArcMargin)
+                    if (Mathf.Repeat(candidate - arc.start, 360f) < width + ArcMargin ||
+                        Mathf.Repeat(arc.start - candidate, 360f) < width + ArcMargin)
                     {
                         free = false;
                         break;
@@ -622,7 +691,7 @@ namespace Lingjuan.UI
                 }
             }
 
-            return UnityEngine.Random.Range(0f, 360f);
+            throw new InvalidOperationException("本轮弧线没有可用的位置。");
         }
 
         private void UpdateHud()
@@ -654,17 +723,24 @@ namespace Lingjuan.UI
 
         private void ClearArcs()
         {
-            foreach (Image arc in _arcs)
+            foreach (RoundArc target in _targets)
             {
-                if (arc != null)
+                if (target.visual != null)
                 {
-                    Destroy(arc.gameObject);
+                    target.visual.gameObject.SetActive(false);
+                    Destroy(target.visual.gameObject);
                 }
             }
 
-            _arcs.Clear();
-            _allArcs.Clear();
             _targets.Clear();
+            _remainingTargets = 0;
+        }
+
+        private sealed class RoundArc
+        {
+            public Image visual;
+            public float start;
+            public bool hit;
         }
 
         private void Close()

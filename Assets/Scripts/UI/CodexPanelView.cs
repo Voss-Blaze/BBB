@@ -16,6 +16,7 @@ namespace Lingjuan.UI
         public Image nameImage;
         public Text nameText;
         public Image portraitImage;
+        [SerializeField] private BeastPortrait[] beastPortraits;
         public Text fragmentTitleText;
         public Text contentText;
         public Button blankCloseButton;
@@ -178,11 +179,7 @@ namespace Lingjuan.UI
                 nameText.enabled = !named || beast.nameSprite == null;
             }
 
-            if (portraitImage != null)
-            {
-                portraitImage.sprite = beast.portraitSprite != null ? beast.portraitSprite : beast.codexSprite;
-                portraitImage.color = sketched ? Color.white : new Color(0.14f, 0.14f, 0.17f, 1f);
-            }
+            ShowPortrait(beast, sketched);
 
             int fragmentCount = PlayerProgress.GetFragmentCount(beast);
 
@@ -196,6 +193,50 @@ namespace Lingjuan.UI
             {
                 contentText.text = BuildContent(beast);
             }
+        }
+
+        private void ShowPortrait(BeastDefinition beast, bool sketched)
+        {
+            Image selected = null;
+            if (beastPortraits != null)
+            {
+                foreach (BeastPortrait entry in beastPortraits)
+                {
+                    if (entry == null || entry.image == null)
+                    {
+                        continue;
+                    }
+
+                    bool visible = selected == null && entry.beast == beast;
+                    entry.image.gameObject.SetActive(visible);
+                    if (visible)
+                    {
+                        selected = entry.image;
+                    }
+                }
+            }
+
+            if (portraitImage != null)
+            {
+                portraitImage.enabled = selected == null;
+                if (selected == null)
+                {
+                    selected = portraitImage;
+                    selected.sprite = beast.portraitSprite != null ? beast.portraitSprite : beast.codexSprite;
+                }
+            }
+
+            if (selected != null)
+            {
+                selected.color = sketched ? Color.white : new Color(0.14f, 0.14f, 0.17f, 1f);
+            }
+        }
+
+        [System.Serializable]
+        private sealed class BeastPortrait
+        {
+            public BeastDefinition beast = null;
+            public Image image = null;
         }
 
         private void UpdateScaleTargets()

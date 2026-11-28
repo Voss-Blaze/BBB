@@ -573,12 +573,8 @@ namespace Lingjuan.EditorTools
             blankButton.transition = Selectable.Transition.None;
             blank.transform.SetSiblingIndex(0);
 
-            GameObject spotRoot = EnsureChild(layer.transform, "踪迹锚点");
-            Stretch(spotRoot.GetComponent<RectTransform>());
-
             TraceFieldView view = EnsureComponent<TraceFieldView>(layer);
             view.database = database;
-            view.spotRoot = spotRoot.GetComponent<RectTransform>();
             view.blankButton = blankButton;
             EditorUtility.SetDirty(view);
 

@@ -48,7 +48,7 @@ namespace Lingjuan.UI
             }
 
             string regionId = GameSession.GetRegionOrFallback();
-            ApplyRegion(regionId, GetTraceRevealDelay(true));
+            ApplyRegion(regionId);
 
             if (panelGroup != null)
             {
@@ -132,7 +132,7 @@ namespace Lingjuan.UI
             }
 
             GameSession.SetRegion(regionId);
-            ApplyRegion(regionId, GetTraceRevealDelay(false));
+            ApplyRegion(regionId);
             panelGroup?.CloseAll();
             ShowToast("已进入" + GetRegionName(regionId));
         }
@@ -142,9 +142,10 @@ namespace Lingjuan.UI
             GameFlow.ReturnToMain();
         }
 
-        private void ApplyRegion(string regionId, float traceRevealDelay)
+        private void ApplyRegion(string regionId)
         {
             CurrentRegionId = regionId;
+            Transform activeMap = null;
 
             if (backgrounds != null)
             {
@@ -152,21 +153,19 @@ namespace Lingjuan.UI
                 {
                     if (background != null && background.root != null)
                     {
-                        background.root.SetActive(background.regionId == regionId);
+                        bool selected = background.regionId == regionId;
+                        background.root.SetActive(selected);
+                        if (selected)
+                        {
+                            activeMap = background.root.transform;
+                        }
                     }
                 }
             }
 
             scrollView?.SetSelectedRegion(regionId);
             codexView?.SetDefaultRegion(regionId);
-            traceField?.SetRegion(regionId, traceRevealDelay);
-        }
-
-        /// <summary>等“已进入”飘屏完全消失后再让踪迹淡入。</summary>
-        private float GetTraceRevealDelay(bool entry)
-        {
-            float toast = database != null && database.config != null ? database.config.toastDuration : 2f;
-            return toast + 0.45f + (entry ? 0.7f : 0f);
+            traceField?.SetRegion(activeMap);
         }
 
         private string GetRegionName(string regionId)
